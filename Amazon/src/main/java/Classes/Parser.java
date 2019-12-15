@@ -35,11 +35,6 @@ public class Parser {
             for (String line = null; (line = br.readLine()) != null; ) {
                 String[] items = line.split(":");
                 parseString(items, br);
-                i++;
-
-                if(i == 1000){
-                    CreateCustomers();
-                }
             }
 
         } catch (IOException e) {
