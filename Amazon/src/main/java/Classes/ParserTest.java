@@ -9,6 +9,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class ParserTest {
 
+    // Tests to see if the parser can correctly write to the amazonItems variable. Only completes when it connects to the database
+    // as well
     @Test
     public void testGetLine() throws IOException {
         Parser parser = new Parser();

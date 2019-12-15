@@ -6,6 +6,8 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 public class ReviewContainer{
+
+    // Variables to denote all the review statistics along with an array list that contains every review
     int downloaded = -1;
     double avg_rating = -1;
     public ArrayList<Reviews> reviews = new ArrayList<>();

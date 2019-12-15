@@ -29,6 +29,8 @@ public class Parser {
     public HashMap<String,ArrayList<String>> customerList = new HashMap<>();
     public GraphHandler graphHandler = new GraphHandler();
 
+
+    // Reads the file from the specified path into the parseString function
     public void getLines() {
         int i = 0;
         try (BufferedReader br = Files.newBufferedReader(Paths.get("C:\\Users\\wisne\\Documents\\School\\415\\amazon-meta.txt"), StandardCharsets.UTF_8)) {
@@ -41,6 +43,8 @@ public class Parser {
             e.printStackTrace();
         }
     }
+
+    // Very basic parser to take every item and store it into each variable
     public void parseString(String [] stringArray, BufferedReader bufferedReader) throws IOException {
         for (int i = 0; i < stringArray.length; i++){
             stringArray[i] = stringArray[i].trim();
@@ -76,6 +80,8 @@ public class Parser {
             }
 
             else if (stringArray[i].equals("reviews")){
+
+                // This is the last item that is parsed so we can create an item and push it
                 reviews = parseReviews(stringArray, i, bufferedReader);
                 AmazonItems item = new AmazonItems(id, ASIN, title, group, salesrank, similar, categories, reviews);
                 reviews = new ReviewContainer();
@@ -86,6 +92,7 @@ public class Parser {
 
     }
 
+    // Used to parse each category
     private ArrayList<String> parseCategories(String[] stringArray, int index, BufferedReader bufferedReader) {
         ArrayList<String> returnList = new ArrayList<>();
         for (int i = index; i < stringArray.length; i++){
@@ -96,6 +103,7 @@ public class Parser {
         return returnList;
     }
 
+    // Parses the data about the reviews and then loops to parse every reviews individual data.
     private ReviewContainer parseReviews(String [] stringArray, int index, BufferedReader bufferedReader) throws IOException {
         Reviews currReview = new Reviews();
         for (int i = index + 1; i < stringArray.length; i++) {
@@ -110,6 +118,7 @@ public class Parser {
                 line = line.replaceAll(" +", " ");
                 String [] arr = line.split(" ");
 
+                //Loop for adding every specific detail about each review
                 while(!line.trim().contains("Id:")) {
                     for (int j = 0; j < arr.length; j++) {
 
@@ -142,6 +151,7 @@ public class Parser {
         return null;
     }
 
+    // Check to see if the date passed in is valid
     public boolean isValidDate(String inDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
@@ -153,6 +163,7 @@ public class Parser {
         return true;
     }
 
+    // Parse to get every related ASIN with that item
     private ArrayList<String> parseSimilar(String [] stringArray, int index) {
         ArrayList<String> returnList = new ArrayList<>();
         String [] categoryArray = stringArray[index + 1].split(" ");
@@ -164,6 +175,7 @@ public class Parser {
         return returnList;
     }
 
+    // See if the string can be parsed into an int
     private boolean tryParse(String string){
         try{
             Integer.parseInt(string);
@@ -174,27 +186,8 @@ public class Parser {
         }
     }
 
-    private void addItemsToGraph(){
-        for (AmazonItems item: amazonItems) {
-        }
+    // Constructor
+    public Parser() {
     }
 
-    public Parser() throws IOException {
-    }
-
-    public void CreateCustomers(){
-        for (AmazonItems item: amazonItems) {
-            for(int i = 0; i < item.reviews.reviews.size(); i++){
-                ArrayList<String> temp;
-                if (customerList.containsKey(item.reviews.reviews.get(i).customer)){
-                    temp = customerList.get(item.reviews.reviews.get(i).customer);
-                }
-                else{
-                    temp = new ArrayList<>();
-                }
-                temp.add(String.valueOf(item.getId()));
-                customerList.put(item.reviews.reviews.get(i).customer, temp);
-            }
-        }
-    }
 }

@@ -3,6 +3,8 @@ package Classes;
 import java.util.ArrayList;
 
 public class Customer {
+
+    // getters and setters for the customer class items
     public String getId() {
         return id;
     }
@@ -19,6 +21,7 @@ public class Customer {
         this.itemsPurchased = itemsPurchased;
     }
 
+    // Variables with the id of the customer and the list of items they have purchased
     public String id;
     public ArrayList<String> itemsPurchased = new ArrayList<>();
 

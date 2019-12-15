@@ -16,17 +16,20 @@ public class GraphHandler {
     Driver driver;
     Session session;
 
+    // Create a driver and login using out username and password
     public GraphHandler(){
         driver = GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "no"));
         createGraph();
     }
 
+    // See if the driver is open for creating a session
     public void createGraph() {
         try (Session session = driver.session()) {
             createSession();
         }
     }
 
+    // Push the item and all its variables to our Neo4J session / database
     public void pushItem(AmazonItems amazonItem){
         session.run("CREATE (test: test" + amazonItem.getId() + " {reviews: \"" + amazonItem.getReviewText() +"\",id: \"" + amazonItem.getId() + "\", asin: \"" + amazonItem.getASIN() + "\", title: \"" +amazonItem.getTitle().replaceAll("[^a-zA-Z0-9]", "")
                 + "\", group: \"" + amazonItem.getGroup().trim()+"\", salesrank: \"" +amazonItem.getSalesrank().trim() + "\", similar: \"" + String.join(", ",  amazonItem.getSimilar()) + "\" }) RETURN "
@@ -35,6 +38,7 @@ public class GraphHandler {
         createCustomer(amazonItem);
     }
 
+    // For every customer we found, add it to the database
     public void createCustomer(AmazonItems amazonItems){
         for (Reviews review: amazonItems.getReviews().reviews) {
             session.run("MATCH (customer {customer: \"" + review.customer + "\"}) CREATE ({customer:\"" + review.customer + "\", asin:\"" + amazonItems.getASIN() +"\"}) RETURN " + amazonItems.getId());
@@ -42,34 +46,14 @@ public class GraphHandler {
 
     }
 
+    // Create a Neo4J session
     public void createSession(){
         session = driver.session();
     }
 
+    // Close a session on Neo4J
     public void closeSession(){
         session.close();
         driver.close();
     }
-
-    public void createRelationships(ArrayList<AmazonItems> arrayList){
-        for (AmazonItems item: arrayList) {
-            for (String asin: item.getSimilar()) {
-                if (findASIN(arrayList ,asin) != null){
-                    session.run("MATCH (item:i0) WHERE ");
-                }
-            }
-        }
-    }
-
-    public AmazonItems findASIN(ArrayList<AmazonItems> arrayList, String ASIN){
-        for (AmazonItems item: arrayList) {
-            if(item.getASIN().equals(ASIN)){
-                return item;
-            }
-        }
-
-        return null;
-    }
-
-
 }

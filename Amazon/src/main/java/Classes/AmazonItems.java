@@ -5,6 +5,8 @@ import scala.math.Ordering;
 import java.util.ArrayList;
 
 public class AmazonItems {
+
+    // Container for all items inside the amazon description
     public int getId() {
         return id;
     }
@@ -37,6 +39,7 @@ public class AmazonItems {
         return reviews;
     }
 
+    // Take the text from a review and return it in a writeable form
     public String getReviewText(){
         StringBuilder sb = new StringBuilder();
         for(Reviews view: reviews.reviews){
@@ -56,6 +59,7 @@ public class AmazonItems {
     private ArrayList<String> categories;
     ReviewContainer reviews;
 
+    // Constructor
     public AmazonItems(int id, String ASIN, String title, String group, String salesRank, ArrayList<String> similar, ArrayList<String> categories, ReviewContainer reviews){
         this.id = id;
         this.ASIN = ASIN;

@@ -2,6 +2,7 @@ package Classes;
 
 public class Reviews {
 
+    // Stores all the items in each review and uses items to signify that it wasn't gotten correctly
     public String date = null;
     public String customer = null;
     int rating = -1;
